@@ -208,7 +208,11 @@ namespace FourSlashInterface {
         }
 
         public refactorAvailable(name: string, actionName?: string) {
-            this.state.verifyRefactorAvailable(this.negative, name, actionName);
+            this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName);
+        }
+
+        public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
+            this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName);
         }
     }
 
@@ -560,6 +564,10 @@ namespace FourSlashInterface {
         public noMoveToNewFile(): void {
             this.state.noMoveToNewFile();
         }
+
+        public organizeImports(newContent: string) {
+            this.state.verifyOrganizeImports(newContent);
+        }
     }
 
     export class Edit {
@@ -845,6 +853,7 @@ namespace FourSlashInterface {
     }
     export namespace Completion {
         export import SortText = ts.Completions.SortText;
+        export import CompletionSource = ts.Completions.CompletionSource;
 
         const functionEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,

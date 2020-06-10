@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /user/username/projects/myproject/tsconfig.json
+Input::
 //// [/user/username/projects/myproject/file1.ts]
 export const c = 30;
 
@@ -21,6 +21,8 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+
     /* Basic Options */
     // "incremental": true,                   /* Enable incremental compilation */
     "target": "es5",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */
@@ -83,49 +85,25 @@ interface Array<T> { length: number; [n: number]: T; }
 
     /* Advanced Options */
     "declarationDir": "decls",                /* Output directory for generated declaration files. */
+    "skipLibCheck": true,                     /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   }
 }
 
 
-//// [/user/username/projects/myproject/file1.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.c = void 0;
-    exports.c = 30;
-});
 
-
-//// [/user/username/projects/myproject/decls/file1.d.ts]
-export declare const c = 30;
-
-
-//// [/user/username/projects/myproject/src/file2.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.d = void 0;
-    exports.d = 30;
-});
-
-
-//// [/user/username/projects/myproject/decls/src/file2.d.ts]
-export declare const d = 30;
-
-
-
+/a/lib/tsc.js -w -p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
-12:00:25 AM - Starting compilation in watch mode...
+[[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:40 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts"]
-Program options: {"target":1,"module":2,"declaration":true,"strict":true,"esModuleInterop":true,"declarationDir":"/user/username/projects/myproject/decls","forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"target":1,"module":2,"declaration":true,"strict":true,"esModuleInterop":true,"declarationDir":"/user/username/projects/myproject/decls","skipLibCheck":true,"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/file1.ts
@@ -157,3 +135,30 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/file1.js]
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.c = void 0;
+    exports.c = 30;
+});
+
+
+//// [/user/username/projects/myproject/decls/file1.d.ts]
+export declare const c = 30;
+
+
+//// [/user/username/projects/myproject/src/file2.js]
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.d = void 0;
+    exports.d = 30;
+});
+
+
+//// [/user/username/projects/myproject/decls/src/file2.d.ts]
+export declare const d = 30;
+
+

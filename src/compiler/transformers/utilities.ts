@@ -143,7 +143,7 @@ namespace ts {
                     break;
 
                 case SyntaxKind.VariableStatement:
-                    if (hasModifier(node, ModifierFlags.Export)) {
+                    if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                         for (const decl of (<VariableStatement>node).declarationList.declarations) {
                             exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames);
                         }
@@ -151,8 +151,8 @@ namespace ts {
                     break;
 
                 case SyntaxKind.FunctionDeclaration:
-                    if (hasModifier(node, ModifierFlags.Export)) {
-                        if (hasModifier(node, ModifierFlags.Default)) {
+                    if (hasSyntacticModifier(node, ModifierFlags.Export)) {
+                        if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                             // export default function() { }
                             if (!hasExportDefault) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
@@ -172,8 +172,8 @@ namespace ts {
                     break;
 
                 case SyntaxKind.ClassDeclaration:
-                    if (hasModifier(node, ModifierFlags.Export)) {
-                        if (hasModifier(node, ModifierFlags.Default)) {
+                    if (hasSyntacticModifier(node, ModifierFlags.Export)) {
+                        if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                             // export default class { }
                             if (!hasExportDefault) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
@@ -259,7 +259,7 @@ namespace ts {
             && kind <= SyntaxKind.LastCompoundAssignment;
     }
 
-    export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): BitwiseOperatorOrHigher {
+    export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): LogicalOperatorOrHigher | SyntaxKind.QuestionQuestionToken {
         switch (kind) {
             case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
             case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;
@@ -273,6 +273,10 @@ namespace ts {
             case SyntaxKind.AmpersandEqualsToken: return SyntaxKind.AmpersandToken;
             case SyntaxKind.BarEqualsToken: return SyntaxKind.BarToken;
             case SyntaxKind.CaretEqualsToken: return SyntaxKind.CaretToken;
+            case SyntaxKind.BarBarEqualsToken: return SyntaxKind.BarBarToken;
+            case SyntaxKind.AmpersandAmpersandEqualsToken: return SyntaxKind.AmpersandAmpersandToken;
+            case SyntaxKind.QuestionQuestionEqualsToken: return SyntaxKind.QuestionQuestionToken;
+
         }
     }
 

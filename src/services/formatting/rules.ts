@@ -129,7 +129,7 @@ namespace ts.formatting {
 
             // Async-await
             rule("SpaceBetweenAsyncAndOpenParen", SyntaxKind.AsyncKeyword, SyntaxKind.OpenParenToken, [isArrowFunctionContext, isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
-            rule("SpaceBetweenAsyncAndFunctionKeyword", SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
+            rule("SpaceBetweenAsyncAndFunctionKeyword", SyntaxKind.AsyncKeyword, [SyntaxKind.FunctionKeyword, SyntaxKind.Identifier], [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
 
             // Template string
             rule("NoSpaceBetweenTagAndTemplateString", [SyntaxKind.Identifier, SyntaxKind.CloseParenToken], [SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead], [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
@@ -274,10 +274,14 @@ namespace ts.formatting {
             rule("NoSpaceAfterOpenBrace", SyntaxKind.OpenBraceToken, anyToken, [isOptionDisabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
             rule("NoSpaceBeforeCloseBrace", anyToken, SyntaxKind.CloseBraceToken, [isOptionDisabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
+            // Insert a space after opening and before closing empty brace brackets
+            rule("SpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingEmptyBraces")], RuleAction.InsertSpace),
+            rule("NoSpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isOptionDisabled("insertSpaceAfterOpeningAndBeforeClosingEmptyBraces"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+
             // Insert space after opening and before closing template string braces
-            rule("SpaceAfterTemplateHeadAndMiddle", [SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle], anyToken, [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
+            rule("SpaceAfterTemplateHeadAndMiddle", [SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle], anyToken, [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), isNonJsxTextContext], RuleAction.InsertSpace, RuleFlags.CanDeleteNewLines),
             rule("SpaceBeforeTemplateMiddleAndTail", anyToken, [SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail], [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
-            rule("NoSpaceAfterTemplateHeadAndMiddle", [SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle], anyToken, [isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+            rule("NoSpaceAfterTemplateHeadAndMiddle", [SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle], anyToken, [isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), isNonJsxTextContext], RuleAction.DeleteSpace, RuleFlags.CanDeleteNewLines),
             rule("NoSpaceBeforeTemplateMiddleAndTail", anyToken, [SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail], [isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
             // No space after { and before } in JSX expression
@@ -684,6 +688,10 @@ namespace ts.formatting {
 
     function isNonJsxSameLineTokenContext(context: FormattingContext): boolean {
         return context.TokensAreOnSameLine() && context.contextNode.kind !== SyntaxKind.JsxText;
+    }
+
+    function isNonJsxTextContext(context: FormattingContext): boolean {
+        return context.contextNode.kind !== SyntaxKind.JsxText;
     }
 
     function isNonJsxElementOrFragmentContext(context: FormattingContext): boolean {
